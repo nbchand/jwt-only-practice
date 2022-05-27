@@ -30,18 +30,20 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 
     private final AuthenticationManager authenticationManager;
 
+    //The attemptAuthentication function runs when the user tries to log in to our application.
+    //It reads the credentials, creates a user POJO from them, and then checks the credentials to authenticate.
     @Override
     public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) throws AuthenticationException {
         try {
             User credential = new ObjectMapper()
                     .readValue(request.getInputStream(), User.class);
 
-            //the empty list represents the authorities (roles),
-            //and we leave it as is since we do not have any roles in our application yet.
             return authenticationManager.authenticate(
                     new UsernamePasswordAuthenticationToken(
                             credential.getUserName(),
                             credential.getPassword(),
+                            //the empty list represents the authorities (roles),
+                            //and we leave it as is since we do not have any roles in our application yet.
                             new ArrayList<>()
                     )
             );
@@ -50,6 +52,8 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
         }
     }
 
+    //If the authentication is successful, the successfulAuthentication method runs.
+    //The parameters of this method are passed by Spring Security behind the scenes.
     @Override
     protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response,
                                             FilterChain chain, Authentication authResult) throws IOException, ServletException {
