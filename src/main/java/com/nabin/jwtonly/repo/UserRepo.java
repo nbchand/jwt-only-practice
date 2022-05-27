@@ -9,4 +9,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
  * @since 2022-05-27
  */
 public interface UserRepo extends JpaRepository<User, Integer> {
+    User findByUserName(String userName);
 }
