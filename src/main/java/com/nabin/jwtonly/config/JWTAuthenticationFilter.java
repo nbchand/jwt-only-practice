@@ -36,6 +36,8 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
             User credential = new ObjectMapper()
                     .readValue(request.getInputStream(), User.class);
 
+            //the empty list represents the authorities (roles),
+            //and we leave it as is since we do not have any roles in our application yet.
             return authenticationManager.authenticate(
                     new UsernamePasswordAuthenticationToken(
                             credential.getUserName(),
