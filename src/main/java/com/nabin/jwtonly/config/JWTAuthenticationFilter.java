@@ -25,6 +25,8 @@ import java.util.Date;
  * @version 1.0
  * @since 2022-05-27
  */
+//We need authentication to make sure that the user is really who they claim to be.
+//We will be using the classic username/password pair to accomplish this.
 @RequiredArgsConstructor
 public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilter {
 
