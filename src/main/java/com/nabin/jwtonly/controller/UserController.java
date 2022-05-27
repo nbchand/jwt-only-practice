@@ -3,10 +3,7 @@ package com.nabin.jwtonly.controller;
 import com.nabin.jwtonly.dto.UserDto;
 import com.nabin.jwtonly.service.UserService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 /**
  * @author Narendra
@@ -19,7 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class UserController {
     private final UserService userService;
 
-    @GetMapping
+    @PostMapping("/sign-up")
     public UserDto createUser(@RequestBody UserDto userDto) {
         return userService.createUser(userDto);
     }
