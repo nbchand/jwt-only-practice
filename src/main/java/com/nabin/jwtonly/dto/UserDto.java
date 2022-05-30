@@ -5,6 +5,7 @@ import lombok.*;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * @author Narendra
@@ -21,19 +22,17 @@ public class UserDto {
     private String userName;
     private String email;
     private String password;
+    private String role;
 
     public UserDto(User user) {
         this.id = user.getId();
         this.userName = user.getUserName();
         this.email = user.getEmail();
         this.password = user.getPassword();
+        this.role = user.getRole();
     }
 
     public static List<UserDto> userToDtoList(List<User> userList) {
-        List<UserDto> userDtoList = new ArrayList<>();
-        for (User user : userList) {
-            userDtoList.add(new UserDto(user));
-        }
-        return userDtoList;
+        return userList.stream().map(user -> new UserDto(user)).collect(Collectors.toList());
     }
 }

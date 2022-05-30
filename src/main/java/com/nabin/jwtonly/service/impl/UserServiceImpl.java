@@ -25,9 +25,11 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserDto createUser(UserDto userDto) {
         User user = User.builder()
+                .id(userDto.getId())
                 .userName(userDto.getUserName())
                 .email(userDto.getEmail())
                 .password(bCryptPasswordEncoder.encode(userDto.getPassword()))
+                .role(userDto.getRole())
                 .build();
         return new UserDto(userRepo.save(user));
     }
