@@ -2,6 +2,8 @@ package com.nabin.jwtonly.service;
 
 import com.nabin.jwtonly.dto.UserDto;
 
+import java.util.List;
+
 /**
  * @author Narendra
  * @version 1.0
@@ -9,4 +11,7 @@ import com.nabin.jwtonly.dto.UserDto;
  */
 public interface UserService {
     UserDto createUser(UserDto userDto);
+    UserDto findByUsernameAndPassword(String username, String password);
+    UserDto findByUsername(String username);
+    List<UserDto> findAll();
 }

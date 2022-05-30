@@ -10,6 +10,7 @@ import javax.persistence.*;
  * @since 2022-05-27
  */
 @Entity
+@Table(name = "users")
 @Getter
 @Setter
 @Builder
@@ -21,8 +22,8 @@ public class User {
     @SequenceGenerator(name = "User_SEQ_GEN", sequenceName = "User_SEQ", allocationSize = 1)
     private Integer id;
 
-    @Column(name = "user_name", unique = true, nullable = false)
-    private String userName;
+    @Column(name = "username", unique = true, nullable = false)
+    private String username;
 
     @Column(unique = true, nullable = false)
     private String email;

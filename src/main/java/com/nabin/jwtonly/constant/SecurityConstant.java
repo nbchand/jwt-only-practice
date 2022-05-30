@@ -6,7 +6,7 @@ package com.nabin.jwtonly.constant;
  * @since 2022-05-27
  */
 public class SecurityConstant {
-    public static final String SECRET = "Secret_Key";
+    public static final String SECRET = "karnivore69";
     public static final long EXPIRATION_TIME = 900_000; // 15 minutes
     public static final String TOKEN_PREFIX = "Bearer ";
     public static final String HEADER_STRING = "Authorization";

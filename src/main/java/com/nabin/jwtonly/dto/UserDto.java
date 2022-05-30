@@ -19,14 +19,14 @@ import java.util.stream.Collectors;
 @Builder
 public class UserDto {
     private Integer id;
-    private String userName;
+    private String username;
     private String email;
     private String password;
     private String role;
 
     public UserDto(User user) {
         this.id = user.getId();
-        this.userName = user.getUserName();
+        this.username = user.getUsername();
         this.email = user.getEmail();
         this.password = user.getPassword();
         this.role = user.getRole();

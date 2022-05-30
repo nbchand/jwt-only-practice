@@ -1,7 +1,5 @@
 package com.nabin.jwtonly.config;
 
-import com.auth0.jwt.JWT;
-import com.auth0.jwt.algorithms.Algorithm;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -40,7 +38,6 @@ public class JWTAuthorizationFilter extends BasicAuthenticationFilter {
                                     HttpServletResponse res,
                                     FilterChain chain) throws IOException, ServletException {
         String header = req.getHeader(HEADER_STRING);
-
         if (header == null || !header.startsWith(TOKEN_PREFIX)) {
             chain.doFilter(req, res);
             return;
@@ -55,21 +52,17 @@ public class JWTAuthorizationFilter extends BasicAuthenticationFilter {
 
     /**
      * <b>Reads the JWT from the Authorization header, and then uses JWT to validate the token</b>
-     *
+     * <p>
      * getAuthentication() verifies the JWT and if the token is valid, it returns an access token which Spring will use internally.
      * This new token is then saved to SecurityContext. We can also pass in Authorities to this token if we need for role-based authorization.
      */
     private UsernamePasswordAuthenticationToken getAuthentication(HttpServletRequest request) {
         String token = request.getHeader(HEADER_STRING);
-
         if (token == null) {
             return null;
         }
         // parse the token.
-        String user = JWT.require(Algorithm.HMAC512(SECRET.getBytes()))
-                .build()
-                .verify(token.replace(TOKEN_PREFIX, ""))
-                .getSubject();
+        String user = TokenHandler.getUsernameFromToken(token);
 
         if (user == null) {
             return null;

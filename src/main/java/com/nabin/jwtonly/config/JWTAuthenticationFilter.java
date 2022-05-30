@@ -1,9 +1,7 @@
 package com.nabin.jwtonly.config;
 
-import com.auth0.jwt.JWT;
-import com.auth0.jwt.algorithms.Algorithm;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.nabin.jwtonly.constant.SecurityConstant;
+import com.google.gson.Gson;
 import com.nabin.jwtonly.entity.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -18,7 +16,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Date;
 
 /**
  * @author Narendra
@@ -27,10 +24,16 @@ import java.util.Date;
  */
 //We need authentication to make sure that the user is really who they claim to be.
 //We will be using the classic username/password pair to accomplish this.
+
+/**
+ * This class is not required if we perform custom authentication.
+ */
 @RequiredArgsConstructor
 public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilter {
 
     private final AuthenticationManager authenticationManager;
+
+    private Gson g = new Gson();
 
     //The attemptAuthentication function runs when the user tries to log in to our application.
     //It reads the credentials, creates a user POJO from them, and then checks the credentials to authenticate.
@@ -42,7 +45,7 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 
             return authenticationManager.authenticate(
                     new UsernamePasswordAuthenticationToken(
-                            credential.getUserName(),
+                            credential.getUsername(),
                             credential.getPassword(),
                             //the empty list represents the authorities (roles),
                             //and we leave it as is since we do not have any roles in our application yet.
@@ -59,19 +62,12 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
     @Override
     protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response,
                                             FilterChain chain, Authentication authResult) throws IOException, ServletException {
-        //creates JWT token
-        String token = JWT.create()
-                //adds username to the token
-                .withSubject(((User)authResult.getPrincipal()).getUserName())
-                //adds expiration time to the token
-                .withExpiresAt(new Date(System.currentTimeMillis()+ SecurityConstant.EXPIRATION_TIME))
-                //first secret key is hashed using HS256 algorithm
-                //then the token is signed using the hashed secret key
-                .sign(Algorithm.HMAC256(SecurityConstant.SECRET.getBytes()));
 
-        //adds token to the response
-        String body = ((User) authResult.getPrincipal()).getUserName() + " " + token;
-        response.getWriter().write(body);
+        User user = g.fromJson(g.toJson(authResult.getPrincipal()), User.class);
+        //creates JWT token
+        String token = TokenHandler.generateToken(user.getUsername());
+
+        response.getWriter().write(token);
         response.getWriter().flush();
     }
 }
