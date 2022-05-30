@@ -28,8 +28,10 @@ public class TokenHandler {
 
     //decrypts token and extracts username from it
     public static String getUsernameFromToken(String token) {
+                //secret key is needed
         return JWT.require(Algorithm.HMAC512(SECRET.getBytes()))
                 .build()
+                //if secret key is present verify the token
                 .verify(token.replace(TOKEN_PREFIX,""))
                 .getSubject();
     }
